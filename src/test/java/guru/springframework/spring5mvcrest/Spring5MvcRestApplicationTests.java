@@ -1,4 +1,4 @@
-package guru.springfamework.spring5mvcrest;
+package guru.springframework.spring5mvcrest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
