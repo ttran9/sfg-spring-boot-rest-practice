@@ -1,6 +1,5 @@
 package guru.springframework.services;
 
-import guru.springframework.api.v1.mapper.CategoryMapper;
 import guru.springframework.api.v1.mapper.CustomerMapper;
 import guru.springframework.api.v1.model.CustomerDTO;
 import guru.springframework.domain.Customer;
@@ -23,7 +22,7 @@ public class CustomerServiceImplTest {
     public static final String FIRST_NAME = "Jim";
     public static final String LAST_NAME = "Koernig";
     public static final Long ID = 1L;
-    public static final String CUSTOMER_URL = "/api/v1/customers/";
+    public static final String CUSTOMER_API_URL = "/api/v1/customers/";
 
     CustomerService customerService;
 
@@ -77,7 +76,7 @@ public class CustomerServiceImplTest {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRST_NAME);
         customerDTO.setLastname(LAST_NAME);
-        customerDTO.setCustomer_url(CUSTOMER_URL + ID);
+        customerDTO.setCustomer_url(CUSTOMER_API_URL + ID);
 
         Customer savedCustomer = new Customer();
         savedCustomer.setFirstname(FIRST_NAME);
@@ -90,8 +89,31 @@ public class CustomerServiceImplTest {
 
         // then
         assertEquals(customerDTO.getFirstname(), savedCustomerDTO.getFirstname());
-//        assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
-//        assertEquals(customerDTO.getCustomer_url(), savedCustomerDTO.getCustomer_url());
+        assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
+        assertEquals(customerDTO.getCustomer_url(), savedCustomerDTO.getCustomer_url());
+    }
+
+    @Test
+    public void saveCustomerByDTO() throws Exception {
+        // given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRST_NAME);
+        customerDTO.setLastname(LAST_NAME);
+        customerDTO.setCustomer_url(CUSTOMER_API_URL + ID);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setLastname(LAST_NAME);
+        savedCustomer.setFirstname(FIRST_NAME);
+        savedCustomer.setId(ID);
+
+        // when
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        CustomerDTO savedCustomerDTO = customerService.saveCustomerByDTO(ID, customerDTO);
+
+        // then
+        assertEquals(customerDTO.getFirstname(), savedCustomerDTO.getFirstname());
+        assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
+        assertEquals(customerDTO.getCustomer_url(), savedCustomerDTO.getCustomer_url());
 
     }
 }
