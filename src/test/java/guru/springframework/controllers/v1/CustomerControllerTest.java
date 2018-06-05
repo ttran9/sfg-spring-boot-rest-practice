@@ -1,7 +1,9 @@
 package guru.springframework.controllers.v1;
 
 import guru.springframework.api.v1.model.CustomerDTO;
+import guru.springframework.controllers.RestResponseEntityExceptionHandler;
 import guru.springframework.services.CustomerService;
+import guru.springframework.services.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -33,6 +35,7 @@ public class CustomerControllerTest {
     private static final String ID_ONE = "1";
     private static final String FIRST_NAME_TWO = "TestTwoFN";
     private static final String LAST_NAME_TWO = "TestTwoLN";
+    private static final String INVALID_ID = "666";
 
     @Mock
     CustomerService customerService;
@@ -46,7 +49,9 @@ public class CustomerControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -178,5 +183,14 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(anyLong());
+    }
+
+    @Test
+    public void testCustomerNotFound() throws Exception {
+        when(customerService.getCustomerById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_BASE_URL + "/" + INVALID_ID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

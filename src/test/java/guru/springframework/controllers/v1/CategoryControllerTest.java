@@ -1,8 +1,10 @@
 package guru.springframework.controllers.v1;
 
 import guru.springframework.api.v1.model.CategoryDTO;
+import guru.springframework.controllers.RestResponseEntityExceptionHandler;
 import guru.springframework.domain.Category;
 import guru.springframework.services.CategoryService;
+import guru.springframework.services.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CategoryControllerTest {
     public static final String NAME = "Jim";
     public static final String NAME_TWO = "Bob";
+    public static final String INVALID_NAME = "Foo";
 
     @Mock
     CategoryService categoryService;
@@ -39,7 +42,9 @@ public class CategoryControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
 
     }
 
@@ -75,5 +80,14 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));
+    }
+
+    @Test
+    public void testGetByNameNotFound() throws Exception {
+        when(categoryService.getCategoryByName(anyString())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CategoryController.BASE_URL + "/" + INVALID_NAME)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
