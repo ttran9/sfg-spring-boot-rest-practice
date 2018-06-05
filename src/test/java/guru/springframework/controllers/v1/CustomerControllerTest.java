@@ -21,9 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -146,5 +144,30 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME_ONE)))
                 .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME_ONE)))
                 .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMERS_API_URL + ID_ONE)));
+    }
+
+    @Test
+    public void testPatchCustomer() throws Exception {
+        // given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRST_NAME_ONE);
+
+        CustomerDTO updatedCustomerDTO = new CustomerDTO();
+        updatedCustomerDTO.setFirstname(FIRST_NAME_ONE);
+        updatedCustomerDTO.setLastname(LAST_NAME_ONE);
+        updatedCustomerDTO.setCustomer_url(CUSTOMERS_API_URL + ID_ONE);
+
+        // when
+        when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(updatedCustomerDTO);
+
+        // then
+        mockMvc.perform(patch(CUSTOMERS_API_URL + ID_ONE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME_ONE)))
+                .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME_ONE)))
+                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMERS_API_URL + ID_ONE)));
+
     }
 }
