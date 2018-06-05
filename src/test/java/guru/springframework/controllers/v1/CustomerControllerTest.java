@@ -9,17 +9,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static guru.springframework.controllers.v1.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,5 +87,37 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME_ONE)))
                 .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME_ONE)));
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception {
+        // given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRST_NAME_ONE);
+        customerDTO.setLastname(LAST_NAME_ONE);
+
+        CustomerDTO returnCustomerDTO = new CustomerDTO();
+        returnCustomerDTO.setFirstname(FIRST_NAME_ONE);
+        returnCustomerDTO.setLastname(LAST_NAME_ONE);
+        returnCustomerDTO.setCustomer_url(CUSTOMERS_API_URL + ID_ONE);
+
+        // when
+        when(customerService.createNewCustomer(customerDTO)).thenReturn(returnCustomerDTO);
+
+        // then
+        mockMvc.perform(post(CUSTOMERS_API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME_ONE)))
+                .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME_ONE)))
+                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMERS_API_URL + ID_ONE)));
+
+        // reference to debug the body and its contents.
+//        String response = mockMvc.perform(post(CUSTOMERS_API_URL)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(asJsonString(customerDTO)))
+//                                .andReturn().getResponse().getContentAsString();
+//        System.out.println(response);
     }
 }
