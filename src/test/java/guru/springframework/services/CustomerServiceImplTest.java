@@ -14,8 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceImplTest {
@@ -114,6 +117,29 @@ public class CustomerServiceImplTest {
         assertEquals(customerDTO.getFirstname(), savedCustomerDTO.getFirstname());
         assertEquals(customerDTO.getLastname(), savedCustomerDTO.getLastname());
         assertEquals(customerDTO.getCustomer_url(), savedCustomerDTO.getCustomer_url());
+    }
 
+    @Test
+    public void deleteCustomerById() throws Exception {
+        // given
+        Customer savedCustomer = new Customer();
+        savedCustomer.setLastname(LAST_NAME);
+        savedCustomer.setFirstname(FIRST_NAME);
+
+        // when
+        customerRepository.save(savedCustomer);
+        long numberOfCustomers = customerRepository.count();
+        customerRepository.deleteById(ID);
+        int expectedNumberOfCustomers = 1;
+
+        // then
+        assertNotEquals(expectedNumberOfCustomers, numberOfCustomers);
+        verify(customerRepository, times(1)).deleteById(anyLong());
+
+        /**
+         * jt's solution below
+         */
+//        customerRepository.deleteById(ID);
+//        verify(customerRepository, times(1)).deleteById(anyLong());
     }
 }
