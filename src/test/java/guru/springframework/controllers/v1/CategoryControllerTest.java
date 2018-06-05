@@ -1,6 +1,7 @@
 package guru.springframework.controllers.v1;
 
 import guru.springframework.api.v1.model.CategoryDTO;
+import guru.springframework.domain.Category;
 import guru.springframework.services.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class CategoryControllerTest {
 
         when(categoryService.getAllCategories()).thenReturn(categories);
 
-        mockMvc.perform(get("/api/v1/categories/")
+        mockMvc.perform(get(CategoryController.BASE_URL + "/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories", hasSize(2)));
@@ -70,7 +71,7 @@ public class CategoryControllerTest {
 
         when(categoryService.getCategoryByName(anyString())).thenReturn(category1);
 
-        mockMvc.perform(get("/api/v1/categories/Jim")
+        mockMvc.perform(get(CategoryController.BASE_URL + "/" + NAME)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(NAME)));

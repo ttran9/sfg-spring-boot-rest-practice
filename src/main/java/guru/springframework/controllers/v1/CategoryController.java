@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/v1/categories/")
+@RequestMapping({CategoryController.BASE_URL})
+//@RequestMapping("${some.url.value}") // using properties file. (the spring context is necessary so unit tests becoming IT texts b/c the spring context would need to be loaded).
 public class CategoryController {
 
+    public static final String BASE_URL = "/api/v1/categories";
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -27,7 +29,7 @@ public class CategoryController {
                 new CategoryListDTO(categoryService.getAllCategories()), HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name){
         return new ResponseEntity<CategoryDTO>(
                 categoryService.getCategoryByName(name), HttpStatus.OK

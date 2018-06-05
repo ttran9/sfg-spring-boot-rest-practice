@@ -10,7 +10,6 @@ public class CustomerMapperTest {
 
     public static final String FIRST_NAME = "Joe";
     public static final String LAST_NAME = "Smith";
-    public static final String CUSTOMER_URL = "";
 
     CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 

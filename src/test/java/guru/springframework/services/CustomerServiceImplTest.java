@@ -2,6 +2,7 @@ package guru.springframework.services;
 
 import guru.springframework.api.v1.mapper.CustomerMapper;
 import guru.springframework.api.v1.model.CustomerDTO;
+import guru.springframework.controllers.v1.CustomerController;
 import guru.springframework.domain.Customer;
 import guru.springframework.repositories.CustomerRepository;
 import org.junit.Before;
@@ -25,7 +26,6 @@ public class CustomerServiceImplTest {
     public static final String FIRST_NAME = "Jim";
     public static final String LAST_NAME = "Koernig";
     public static final Long ID = 1L;
-    public static final String CUSTOMER_API_URL = "/api/v1/customers/";
 
     CustomerService customerService;
 
@@ -79,7 +79,7 @@ public class CustomerServiceImplTest {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRST_NAME);
         customerDTO.setLastname(LAST_NAME);
-        customerDTO.setCustomer_url(CUSTOMER_API_URL + ID);
+        customerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + ID);
 
         Customer savedCustomer = new Customer();
         savedCustomer.setFirstname(FIRST_NAME);
@@ -102,7 +102,7 @@ public class CustomerServiceImplTest {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRST_NAME);
         customerDTO.setLastname(LAST_NAME);
-        customerDTO.setCustomer_url(CUSTOMER_API_URL + ID);
+        customerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + ID);
 
         Customer savedCustomer = new Customer();
         savedCustomer.setLastname(LAST_NAME);
