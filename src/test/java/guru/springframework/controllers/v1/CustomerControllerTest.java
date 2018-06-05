@@ -17,7 +17,9 @@ import java.util.List;
 import static guru.springframework.controllers.v1.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -119,5 +121,30 @@ public class CustomerControllerTest {
 //                                .content(asJsonString(customerDTO)))
 //                                .andReturn().getResponse().getContentAsString();
 //        System.out.println(response);
+    }
+
+    @Test
+    public void testUpdateCustomer() throws Exception {
+        // given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRST_NAME_ONE);
+        customerDTO.setLastname(LAST_NAME_ONE);
+
+        CustomerDTO updatedCustomerDTO = new CustomerDTO();
+        updatedCustomerDTO.setFirstname(FIRST_NAME_ONE);
+        updatedCustomerDTO.setLastname(LAST_NAME_ONE);
+        updatedCustomerDTO.setCustomer_url(CUSTOMERS_API_URL + ID_ONE);
+
+        // when
+        when(customerService.saveCustomerByDTO(anyLong(), any(CustomerDTO.class))).thenReturn(updatedCustomerDTO);
+
+        // then
+        mockMvc.perform(put(CUSTOMERS_API_URL + ID_ONE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME_ONE)))
+                .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME_ONE)))
+                .andExpect(jsonPath("$.customer_url", equalTo(CUSTOMERS_API_URL + ID_ONE)));
     }
 }
