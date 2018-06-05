@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
                     customerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + customer.getId());
                     return customerDTO;
-                }).orElseThrow(RuntimeException::new);
+                }).orElseThrow(ResourceNotFoundException::new);
 
     }
 
