@@ -26,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerControllerTest {
     private static final String FIRST_NAME_ONE = "TestFN";
     private static final String LAST_NAME_ONE = "TestLN";
-    private static final String ID_ONE = "/1";
+    private static final String ID_ONE = "1";
     private static final String FIRST_NAME_TWO = "TestTwoFN";
     private static final String LAST_NAME_TWO = "TestTwoLN";
-    private static final String CUSTOMERS_API_URL = "/api/v1/customers";
+    private static final String CUSTOMERS_API_URL = "/api/v1/customers/";
 
     @Mock
     CustomerService customerService;
