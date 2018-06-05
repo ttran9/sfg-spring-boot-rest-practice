@@ -2,16 +2,15 @@ package guru.springframework.controllers.v1;
 
 import guru.springframework.api.v1.model.CustomerDTO;
 import guru.springframework.api.v1.model.CustomerListDTO;
+import guru.springframework.domain.Customer;
 import guru.springframework.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/v1/customers/")
+@RequestMapping({"/api/v1/customers"})
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -26,10 +25,18 @@ public class CustomerController {
                 new CustomerListDTO(customerService.getAllCustomers()), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         return new ResponseEntity<CustomerDTO>(
             customerService.getCustomerById(id), HttpStatus.OK
+        );
+    }
+
+    @PostMapping
+    // look at the body of the request and try to parse and create a CustomerDTO from it.
+    public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+        return new ResponseEntity<CustomerDTO>(
+                customerService.createNewCustomer(customerDTO), HttpStatus.CREATED
         );
     }
 }
