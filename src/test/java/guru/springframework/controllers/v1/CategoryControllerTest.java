@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CategoryControllerTest {
     public static final String NAME = "Jim";
+    public static final String NAME_TWO = "Bob";
 
     @Mock
     CategoryService categoryService;
@@ -49,7 +50,7 @@ public class CategoryControllerTest {
 
         CategoryDTO category2 = new CategoryDTO();
         category2.setId(2l);
-        category2.setName("Bob");
+        category2.setName(NAME_TWO);
 
         List<CategoryDTO> categories = Arrays.asList(category1, category2);
 
