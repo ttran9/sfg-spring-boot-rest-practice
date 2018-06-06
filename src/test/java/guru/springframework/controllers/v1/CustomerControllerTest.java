@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.print.attribute.standard.Media;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -57,13 +55,9 @@ public class CustomerControllerTest {
     @Test
     public void testGetAllCustomers() throws Exception {
         // given
-        CustomerDTO customerOne = new CustomerDTO();
-        customerOne.setFirstname(FIRST_NAME_ONE);
-        customerOne.setLastname(LAST_NAME_ONE);
+        CustomerDTO customerOne = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
 
-        CustomerDTO customerTwo = new CustomerDTO();
-        customerTwo.setFirstname(FIRST_NAME_TWO);
-        customerTwo.setLastname(LAST_NAME_TWO);
+        CustomerDTO customerTwo = getCustomerDTO(FIRST_NAME_TWO, LAST_NAME_TWO);
 
         // when
         List<CustomerDTO> customers = Arrays.asList(customerOne, customerTwo);
@@ -77,12 +71,17 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.customers", hasSize(customers.size())));
     }
 
+    private CustomerDTO getCustomerDTO(String firstName, String lastName) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(firstName);
+        customerDTO.setLastname(lastName);
+        return customerDTO;
+    }
+
     @Test
     public void testGetCustomerById() throws Exception {
         //given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname(FIRST_NAME_ONE);
-        customerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO customerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
 
         // when
         when(customerService.getCustomerById(anyLong())).thenReturn(customerDTO);
@@ -98,13 +97,9 @@ public class CustomerControllerTest {
     @Test
     public void createNewCustomer() throws Exception {
         // given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname(FIRST_NAME_ONE);
-        customerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO customerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
 
-        CustomerDTO returnCustomerDTO = new CustomerDTO();
-        returnCustomerDTO.setFirstname(FIRST_NAME_ONE);
-        returnCustomerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO returnCustomerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
         returnCustomerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + ID_ONE);
 
         // when
@@ -130,13 +125,9 @@ public class CustomerControllerTest {
     @Test
     public void testUpdateCustomer() throws Exception {
         // given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname(FIRST_NAME_ONE);
-        customerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO customerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
 
-        CustomerDTO updatedCustomerDTO = new CustomerDTO();
-        updatedCustomerDTO.setFirstname(FIRST_NAME_ONE);
-        updatedCustomerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO updatedCustomerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
         updatedCustomerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + ID_ONE);
 
         // when
@@ -158,9 +149,7 @@ public class CustomerControllerTest {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRST_NAME_ONE);
 
-        CustomerDTO updatedCustomerDTO = new CustomerDTO();
-        updatedCustomerDTO.setFirstname(FIRST_NAME_ONE);
-        updatedCustomerDTO.setLastname(LAST_NAME_ONE);
+        CustomerDTO updatedCustomerDTO = getCustomerDTO(FIRST_NAME_ONE, LAST_NAME_ONE);
         updatedCustomerDTO.setCustomer_url(CustomerController.CUSTOMER_BASE_URL + "/" + ID_ONE);
 
         // when
