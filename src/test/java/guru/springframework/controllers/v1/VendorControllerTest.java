@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,15 +28,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@RunWith(SpringRunner.class)
-//@WebMvcTest(controllers = {VendorController.class})
 public class VendorControllerTest {
 
     private static final String VENDOR_NAME = "Coca Cola Solutions";
     private static final String VENDOR_ID_ONE = "1";
     private static final String VENDOR_TWO_NAME = "Coca Cola Solutions";
     private static final String VENDOR_ID_TWO = "2";
-    private static final String INVALID_VENDOR_ID = "666";
 
     @Mock
     VendorService vendorService;
@@ -43,7 +41,6 @@ public class VendorControllerTest {
     @InjectMocks
     VendorController vendorController;
 
-//    @Autowired
     MockMvc mockMvc;
 
     VendorDTO vendorDTO;
