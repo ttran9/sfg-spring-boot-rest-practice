@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/springframeworkguru/spring-rest-client-examples.svg?style=svg)]
+![CircleCI](https://circleci.com/gh/springframeworkguru/spring-rest-client-examples.svg?style=svg)
 # Spring Rest Client
 
 This repository is for an example application built from John Thompson's Udemy course, Spring Framework 5 - Beginner to Guru
