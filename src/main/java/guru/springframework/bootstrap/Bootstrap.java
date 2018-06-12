@@ -59,14 +59,12 @@ public class Bootstrap implements CommandLineRunner {
         Customer customer = new Customer();
         customer.setFirstname("Joe");
         customer.setLastname("Smith");
-//        customer.setId(1L);
 
         customerRepository.save(customer);
 
         Customer customerTwo = new Customer();
         customerTwo.setFirstname("Bob");
         customerTwo.setLastname("Franco");
-//        customerTwo.setId(2L);
 
         customerRepository.save(customerTwo);
 
@@ -79,7 +77,7 @@ public class Bootstrap implements CommandLineRunner {
         vendorRepository.save(vendor);
 
         Vendor vendorTwo = new Vendor();
-        vendor.setName("Dell Solutions");
+        vendorTwo.setName("Dell Solutions");
         vendorRepository.save(vendorTwo);
 
         System.out.println("Vendors loaded = " + vendorRepository.count());
