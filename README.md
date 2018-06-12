@@ -17,3 +17,6 @@ The course can be seen [here.](http://courses.springframework.guru/p/spring-fram
         
 - To simulate the HTTP Methods GET, POST, PUT, PATCH, DELETE, AND POST I used [Postman](https://www.getpostman.com/apps) 
 to do test the requests.       
+
+- Remember it may be necessary to use mvn clean and compile commands if there are errors related to the mapper objects
+(the three mappers for the three POJOs).
